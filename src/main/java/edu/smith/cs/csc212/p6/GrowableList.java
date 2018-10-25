@@ -1,9 +1,12 @@
 package edu.smith.cs.csc212.p6;
 
+
+
+import edu.smith.cs.csc212.p6.errors.EmptyListError;
 import edu.smith.cs.csc212.p6.errors.P6NotImplemented;
 
 public class GrowableList<T> implements P6List<T> {
-	public static final int START_SIZE = 32;
+	public static final int START_SIZE = 4;
 	private Object[] array;
 	private int fill;
 	
@@ -19,24 +22,50 @@ public class GrowableList<T> implements P6List<T> {
 
 	@Override
 	public T removeBack() {
-		throw new P6NotImplemented();
+		if (this.size() == 0) {
+			throw new EmptyListError();
+		}
+		T value = this.getIndex(fill-1);
+		fill--;
+		this.array[fill] = null;
+		return value;
 	}
+	
 
 	@Override
 	public T removeIndex(int index) {
-		throw new P6NotImplemented();
+		if (this.size() == 0) {
+			throw new EmptyListError();
+		}
+		T removed = this.getIndex(index);
+		fill--;
+		for (int i=index; i<fill; i++) {
+			this.array[i] = this.array[i+1];
+		}
+		this.array[fill] = null;
+		return removed;
 	}
 
 	@Override
 	public void addFront(T item) {
-		throw new P6NotImplemented();
+		for(int i = this.array.length-1; i > 0; i--) {
+			array[i+1] = array[i];
+		}
+			array[0] = item;
 	}
 
 	@Override
 	public void addBack(T item) {
 		// I've implemented part of this for you.
 		if (fill >= this.array.length) { 
-			throw new P6NotImplemented();
+			int newsize = START_SIZE *2;
+			Object[] newArray = new Object[newsize];
+			for (int i = 0; i< array.length; i++) {
+				newArray[i] = array[i];
+			}
+			this.array =  newArray;
+			newArray[fill] = item;
+			fill++;
 		}
 		this.array[fill++] = item;
 	}
