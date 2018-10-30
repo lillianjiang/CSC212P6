@@ -3,7 +3,6 @@ package edu.smith.cs.csc212.p6;
 import java.util.Iterator;
 
 import edu.smith.cs.csc212.p6.errors.EmptyListError;
-import edu.smith.cs.csc212.p6.errors.P6NotImplemented;
 
 public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	/**
@@ -21,12 +20,41 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public T removeBack() {
-		throw new P6NotImplemented();
+		checkNotEmpty();
+		if (start.next == null) {
+			T last = start.value;
+			start = null;
+			return last;
+		} else {
+			Node<T> current = start;
+			for (current = start; current.next.next != null; current = current.next) {
+				continue;
+			}
+			T last = current.next.value;
+			current.next = null;
+			return last;
+		}
 	}
 
 	@Override
 	public T removeIndex(int index) {
-		throw new P6NotImplemented();
+		checkNotEmpty();
+		if (index == 0) {
+			T removed = start.value;
+			Node<T> newstart = start.next;
+			start = newstart;
+			return removed;
+		} else {
+			T removed = start.value;
+			Node<T> current = start;
+			for (int i = 0; i < index - 1; i++) {
+				current = current.next;
+			}
+			Node<T> after = current.next.next;
+			removed = current.next.value;
+			current.next = after;
+			return removed;
+		}
 	}
 
 	@Override
@@ -36,12 +64,27 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public void addBack(T item) {
-		throw new P6NotImplemented();
+		Node<T> newNode = new Node<T>(item, null);
+		if (start == null) {
+			start = newNode;
+		} else {
+			Node<T> last = start;
+			while (last.next != null) {
+				last = last.next;
+			}
+			last.next = newNode;
+		}
 	}
 
 	@Override
 	public void addIndex(T item, int index) {
-		throw new P6NotImplemented();
+		Node<T> current = start;
+		for (int i = 0; i < index; i++) {
+			current = current.next;
+		}
+		Node<T> after = current;
+		current.value = item;
+		current.next = after;
 	}
 
 	@Override
@@ -51,12 +94,25 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public T getBack() {
-		throw new P6NotImplemented();
+		T last = start.value;
+		for (Node<T> current = start; current != null; current = current.next) {
+			last = current.value;
+		}
+		return last;
 	}
 
 	@Override
 	public T getIndex(int index) {
-		throw new P6NotImplemented();
+		checkNotEmpty();
+
+		T getvalue = start.value;
+		Node<T> current = start;
+		for (int i = 0; i < index; i++) {
+			getvalue = current.next.value;
+			current = current.next;
+		}
+		return getvalue;
+
 	}
 
 	@Override
@@ -70,7 +126,11 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 	@Override
 	public boolean isEmpty() {
-		throw new P6NotImplemented();
+		if (start == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -86,7 +146,8 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	 * The node on any linked list should not be exposed. Static means we don't need
 	 * a "this" of SinglyLinkedList to make a node.
 	 * 
-	 * @param <T> the type of the values stored.
+	 * @param <T>
+	 *            the type of the values stored.
 	 */
 	private static class Node<T> {
 		/**
@@ -101,7 +162,8 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 		/**
 		 * Create a node with no friends.
 		 * 
-		 * @param value - the value to put in it.
+		 * @param value
+		 *            - the value to put in it.
 		 */
 		public Node(T value, Node<T> next) {
 			this.value = value;
@@ -126,7 +188,9 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 
 		/**
 		 * This constructor details where to start, given a list.
-		 * @param list - the SinglyLinkedList to iterate or loop over.
+		 * 
+		 * @param list
+		 *            - the SinglyLinkedList to iterate or loop over.
 		 */
 		public Iter(SinglyLinkedList<T> list) {
 			this.current = list.start;
@@ -144,9 +208,11 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 			return found;
 		}
 	}
-	
+
 	/**
-	 * Implement iterator() so that {@code SinglyLinkedList} can be used in a for loop.
+	 * Implement iterator() so that {@code SinglyLinkedList} can be used in a for
+	 * loop.
+	 * 
 	 * @return an object that understands "next()" and "hasNext()".
 	 */
 	public Iterator<T> iterator() {

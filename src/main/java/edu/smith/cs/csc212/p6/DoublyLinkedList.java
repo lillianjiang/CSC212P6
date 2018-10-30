@@ -33,7 +33,9 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	@Override
 	public T removeIndex(int index) {
 		checkNotEmpty();
-		throw new P6NotImplemented();
+		
+			
+		}
 	}
 
 	@Override
