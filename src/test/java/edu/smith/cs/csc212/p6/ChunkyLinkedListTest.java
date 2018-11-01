@@ -35,6 +35,9 @@ public class ChunkyLinkedListTest {
 	public void testAddToFront() {
 		P6List<String> data = new ChunkyLinkedList<String>(4);
 		data.addFront("1");
+		for (int i= 0;i<data.size();i++) {
+			System.out.println(data.getIndex(i));
+		}
 		Assert.assertEquals(1, data.size());
 		Assert.assertEquals("1", data.getIndex(0));
 		data.addFront("0");
@@ -100,6 +103,9 @@ public class ChunkyLinkedListTest {
 		data.addBack("d");
 		data.addBack("e");
 		data.addBack("f");
+		for (int i= 0;i<data.size();i++) {
+			System.out.println(data.getIndex(i));
+		}
 		return data;
 	}
 

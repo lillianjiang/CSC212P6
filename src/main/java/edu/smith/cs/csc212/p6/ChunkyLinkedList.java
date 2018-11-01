@@ -18,6 +18,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 
 	public ChunkyLinkedList(int chunkSize) {
 		this.chunkSize = chunkSize;
+		chunks = new SinglyLinkedList<>();
 		chunks.addBack(new FixedSizeList<T>(chunkSize));
 	}
 
@@ -80,7 +81,8 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 			int end = start + chunk.size();
 			if (start <= index && index < end) {
 				if (chunk.size() < chunkSize) {
-					chunk.addIndex(item, index % chunkSize); //O(n)
+					chunk.addIndex(item, index % chunkSize); //O(n)	
+					
 				} else {
 					FixedSizeList<T> newchunk = new FixedSizeList<>(chunkSize);
 					newchunk.addFront(item); //O(1)
@@ -113,20 +115,20 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 		if (this.isEmpty()) {
 			throw new EmptyListError();
 		}
-		int start = 0;
-		for (FixedSizeList<T> chunk : this.chunks) { //O(n)
-			// calculate bounds of this chunk.
-			int end = start + chunk.size();
-
-			// Check whether the index should be in this chunk:
-			if (start <= index && index < end) {
-				return chunk.getIndex(index - start); //O(1)
-			}
-
-			// update bounds of next chunk.
-			start = end;
+			int start = 0;
+			for (FixedSizeList<T> chunk : this.chunks) { //O(n)
+				// calculate bounds of this chunk.
+				int end = start + chunk.size();
+	
+				// Check whether the index should be in this chunk:
+				if (start <= index && index < end) {
+					return chunk.getIndex(index - start); //O(1)
+				}
+	
+				// update bounds of next chunk.
+				start = end;
 		}
-		throw new BadIndexError();
+			throw new BadIndexError();
 	}
 
 	//O(n)

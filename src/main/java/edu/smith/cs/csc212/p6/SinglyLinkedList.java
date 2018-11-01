@@ -11,6 +11,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	Node<T> start;
 
 	@Override
+	//O(1)
 	public T removeFront() {
 		checkNotEmpty();
 		T before = start.value;
@@ -19,6 +20,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public T removeBack() {
 		checkNotEmpty();
 		if (start.next == null) {
@@ -37,6 +39,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public T removeIndex(int index) {
 		checkNotEmpty();
 		if (index == 0) {
@@ -47,7 +50,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 		} else {
 			T removed = start.value;
 			Node<T> current = start;
-			for (int i = 0; i < index - 1; i++) {
+			for (int i = 0; i < index - 1; i++) { //N
 				current = current.next;
 			}
 			Node<T> after = current.next.next;
@@ -58,11 +61,13 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(1)
 	public void addFront(T item) {
 		this.start = new Node<T>(item, start);
 	}
 
 	@Override
+	//O(N)
 	public void addBack(T item) {
 		Node<T> newNode = new Node<T>(item, null);
 		if (start == null) {
@@ -77,6 +82,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public void addIndex(T item, int index) {
 		Node<T> current = start;
 		for (int i = 0; i < index; i++) {
@@ -88,11 +94,13 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(1)
 	public T getFront() {
 		return start.value;
 	}
 
 	@Override
+	//O(N)
 	public T getBack() {
 		T last = start.value;
 		for (Node<T> current = start; current != null; current = current.next) {
@@ -102,6 +110,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public T getIndex(int index) {
 		checkNotEmpty();
 
@@ -116,6 +125,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public int size() {
 		int count = 0;
 		for (Node<T> n = this.start; n != null; n = n.next) {
@@ -125,6 +135,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	}
 
 	@Override
+	//O(1)
 	public boolean isEmpty() {
 		if (start == null) {
 			return true;
