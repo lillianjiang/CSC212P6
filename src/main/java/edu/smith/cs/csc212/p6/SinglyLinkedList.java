@@ -185,7 +185,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	/**
 	 * I'm providing this class so that SinglyLinkedList can be used in a for loop
 	 * for {@linkplain ChunkyLinkedList}. This Iterator type is what java uses for
-	 * {@code for (T x : list) { }} lops.
+	 * {@code for (T x : list) { }} loops.
 	 * 
 	 * @author jfoley
 	 *
