@@ -1,0 +1,29 @@
+Reflection for P6
+
+1. Different data structures have different complexity. This exercise is useful for us in the future to determine 
+which data structure is better for certain tasks.
+
+2. SinglyLinkedList is one-way list - .next to call the current.next
+   doublelinkedlist have before/after pointer, so if we want to add or remove on index, we need to reset both direction.
+ 
+3. drawing the graph on the paper/board helps a lot
+
+4. when working on difficult tasks like chunkylisk, we need to consider different case
+	that is to say, if/else statement became very important
+	
+5. for loop for node is a tricky one, we need to pay attention to the iteration steps.
+	For example, when to break the loop, is it current != null or current.next != null
+	
+6. checkisempty() is efficient. we need to check the condition for almost every method we wrote
+	it is useful and more efficient if we create boolean method, instead of checking it every time
+	
+7. In chunkylist, if why cant null has index
+
+8. when we remove some elements in chunkylist, if there is no element in a chunk, we better delelted the chunks(node0
+	because it is not good to leave empty node into it .
+	
+9. there is no O(N^3) at least in P6, if there is three O(N) method, the sum is 0(n+n+n) not O(n^3)
+
+10. I am glad I started writing the program early. so I dont panic out this weekend.
+
+   

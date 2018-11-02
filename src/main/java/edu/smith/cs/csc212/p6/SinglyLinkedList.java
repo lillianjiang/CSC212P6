@@ -84,19 +84,25 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	@Override
 	//O(N)
 	public void addIndex(T item, int index) {
+		
 		Node<T> current = start;
 		for (int i = 0; i < index; i++) {
 			current = current.next;
 		}
 		Node<T> after = current;
 		current.value = item;
-		current.next = after;
+		current.next = after.next;
 	}
 
 	@Override
 	//O(1)
 	public T getFront() {
-		return start.value;
+		if(start==null) {
+			return null;
+		}
+		else {
+			return start.value;
+		}
 	}
 
 	@Override

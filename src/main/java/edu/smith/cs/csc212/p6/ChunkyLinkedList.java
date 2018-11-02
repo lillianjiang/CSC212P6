@@ -21,73 +21,91 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	public ChunkyLinkedList(int chunkSize) {
 		this.chunkSize = chunkSize;
 		chunks = new SinglyLinkedList<>();
-		//chunks.addBack(new FixedSizeList<T>(chunkSize));
+		chunks.addBack(new FixedSizeList<T>(chunkSize));
 	}
 
-	//O(n^3)
+	//O(2n/chunkSize+chunkSize)n)
 	@Override
 	public T removeFront() {
-		if (this.isEmpty()) {
-			throw new EmptyListError();
-		} else {
-			return removeIndex(0);
-		}
+		return removeIndex(0);
 	}
 
-	//O(n^3)
+	//O(2n/chunkSize+chunkSize)
 	@Override
 	public T removeBack() {
 		if (this.isEmpty()) {
 			throw new EmptyListError();
 		} else {
-			return removeIndex(size()-1);
+			return removeIndex(this.size()-1);
 		}
 	}
 
 	//O(2n/chunkSize+chunkSize)
 	@Override
 	public T removeIndex(int index) {
+		System.out.println("removeIndex: "+index);
+
 		if (this.isEmpty()) {
 			throw new EmptyListError();
 		} else {
+			//keep track of the chunk index(the index of singlylinkedlist)
+			int chunkCount=0;
+			
 			int start = 0;
 			for (FixedSizeList<T> chunk : this.chunks) { //O(n)
 				int end = start + chunk.size();
+				System.out.println("chunk: "+start);
 				if (start <= index && index < end) {
-					return chunk.removeIndex(index - start); //O(chunkSize)
+					T deleted = chunk.removeIndex(index - start); //O(chunkSize)
+					
+					//if in current node, there is no chunk/element in it, we delete this node
+					if(chunk.size() == 0) {
+						this.chunks.removeIndex(chunkCount);
+						chunkCount--;
+					}
+					return deleted;
 				}
 				start = end;
+				chunkCount++;
 			}
 			throw new BadIndexError();
 		}
 	}
 
-	//O(n^3)
-	@Override
+	
+	@Override 
 	public void addFront(T item) {
-		if(chunks.getFront().size() == chunkSize) {
-			FixedSizeList<T> newchunk = new FixedSizeList<T>(chunkSize);
-			chunks.addFront(newchunk);
-			newchunk.addFront(item);
-		}
-		else {
-			chunks.getFront().addBack(item);
-		}
+		this.addIndex(item, 0);
 	}
+//		if(this.chunks.getFront().size() == chunkSize) {
+//			FixedSizeList<T> newchunk = new FixedSizeList<T>(chunkSize);
+//			this.chunks.addFront(newchunk);
+//			newchunk.addFront(item);
+//		}
+//		else {
+//			this.chunks.getFront().addBack(item);
+//		}
+//	}
 
-	//O(n^3)
+	
 	@Override
 	public void addBack(T item) {
 		addIndex(item, size());
 	}
 
-	//O(n^3)
+	
 	@Override
 	public void addIndex(T item, int index) {
+		//if there is no chunks in the chunky, we create a new node(chunks) and
+		// put the first item into the new chunks
 		if(this.isEmpty()) {
-			this.addFront(item);
+			FixedSizeList<T> newnode = new FixedSizeList<T>(chunkSize);
+			newnode.addFront(item);
+			//System.out.println(chunks.getFront().size());
+			this.chunks.addFront(newnode);
 			return;
 		}
+		//a counter for the index of chunks(Nodes) in the list
 		int chunkNum = 0;
 		int start = 0;
 		for (FixedSizeList<T> chunk : this.chunks) {
@@ -97,44 +115,45 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 				if(chunk.size() == chunkSize) {
 					//make a new FSL
 					FixedSizeList<T> newchunk = new FixedSizeList<>(chunkSize);
-					chunks.addIndex(newchunk, chunkNum+1);
-					newchunk.addFront(item);
+					/*
+					 * We need to move every element downward/rightward in order to
+					 * create a space for the item we wanna add in.
+					 * 
+					 * the special case is if we want to add the item to the last position
+					 * of the current chunk. Then we just create a new chunks(node) to put it into.
+					 * 
+					 * otherwise, we need to move all the elemts from the target postion to downward. and the last elemnt
+					 * of the current chunk need to be moved to a new chunk's front
+					 */
+					if(index != end) {
+						//remove the last elemts in current chunk to the newchunk's front
+						newchunk.addFront(chunk.getBack());
+						chunk.removeBack();
+						//add the newchunk(node) after the current chunks
+						chunks.addIndex(newchunk, chunkNum+1);
+						
+						//move every ele after the index downward
+						chunk.addIndex(item, index - start);
+					}
+					else {
+						newchunk.addFront(item);
+						chunks.addIndex(newchunk, chunkNum+1);
+					}
 				}
+				//if chunk is not full
 				else {
 					chunk.addIndex(item, index - start);
 				}
 				return;
 			}
+			//update the bound
 			start = end;
+			//chunks(node) index++
 			chunkNum++;
 		}
 		
-//		int start = 0;
-//		System.out.println("chunks.size()" + this.chunks.size());
-//		
-//	
-//		
-//		for (FixedSizeList<T> chunk : this.chunks) { //O(n)
-//			int end = start + chunk.size();
-//			if (start <= index && index <= end) {
-//				if (chunk.size() < chunkSize) {
-//					chunk.addIndex(item, index % chunkSize); //O(n)	
-//					
-//				} else {
-//					FixedSizeList<T> newchunk = new FixedSizeList<>(chunkSize);
-//					newchunk.addFront(item); //O(1)
-//					chunks.addIndex(newchunk, (index / chunkSize) + 1); //O(n)
-//				}
-//			}
-//			start = end;
-//		}
-		
-		// did the loop find the index? if not, maybe we need a new "chunk"
-		if (this.chunks.isEmpty()) {
-			this.chunks.addFront(new FixedSizeList<T>(chunkSize));
-		}
 	}
-
+		
 	//O(1)
 	@Override
 	public T getFront() {

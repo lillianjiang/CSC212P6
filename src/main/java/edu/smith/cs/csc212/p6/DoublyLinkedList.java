@@ -1,8 +1,10 @@
 package edu.smith.cs.csc212.p6;
 
+import java.util.Iterator;
+
 import edu.smith.cs.csc212.p6.errors.EmptyListError;
 
-public class DoublyLinkedList<T> implements P6List<T> {
+public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 	private Node<T> start;
 	private Node<T> end;
 
@@ -211,4 +213,31 @@ public class DoublyLinkedList<T> implements P6List<T> {
 			this.after = null;
 		}
 	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new Iter<>(this);
+	}
+	
+	private static class Iter<T> implements Iterator<T> {
+
+		Node <T> current;
+		
+		public Iter(DoublyLinkedList<T> list) {
+			this.current = list.start;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return current.after != null;
+		}
+
+		@Override
+		public T next() {
+			T found = current.value;
+			current = current.after;
+			return found;
+		}
+	}
 }
+
