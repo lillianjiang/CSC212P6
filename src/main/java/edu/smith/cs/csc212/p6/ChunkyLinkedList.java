@@ -43,7 +43,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	//O(2n/chunkSize+chunkSize)
 	@Override
 	public T removeIndex(int index) {
-		System.out.println("removeIndex: "+index);
+//		System.out.println("removeIndex: "+index);
 
 		if (this.isEmpty()) {
 			throw new EmptyListError();
@@ -54,7 +54,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 			int start = 0;
 			for (FixedSizeList<T> chunk : this.chunks) { //O(n)
 				int end = start + chunk.size();
-				System.out.println("chunk: "+start);
+				
 				if (start <= index && index < end) {
 					T deleted = chunk.removeIndex(index - start); //O(chunkSize)
 					

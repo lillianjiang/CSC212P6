@@ -35,9 +35,7 @@ public class ChunkyLinkedListTest {
 	public void testAddToFront() {
 		P6List<String> data = new ChunkyLinkedList<String>(4);
 		data.addFront("1");
-		for (int i= 0;i<data.size();i++) {
-			System.out.println(data.getIndex(i));
-		}
+		
 		Assert.assertEquals(1, data.size());
 		Assert.assertEquals("1", data.getIndex(0));
 		data.addFront("0");
@@ -97,7 +95,6 @@ public class ChunkyLinkedListTest {
 	 */
 	public P6List<String> makeFullList() {
 		P6List<String> data = new ChunkyLinkedList<String>(4);
-		System.out.println("makeFullList?");
 
 		data.addBack("a");
 
@@ -110,23 +107,15 @@ public class ChunkyLinkedListTest {
 		data.addBack("e");
 
 		data.addBack("f");
-
-		System.out.println("makeFullList? " + data.size());
-
-		for (int i= 0;i<data.size();i++) {
-			System.out.println(data.getIndex(i));
-		}
-		System.out.println("makeFullList?");
-
+		
 		return data;
 	}
 
 	@Test
 	public void testRemoveFront() {
-		System.out.println("makeFullList?");
 
 		P6List<String> data = makeFullList();
-		System.out.println("makeFullList?");
+
 		Assert.assertEquals(6, data.size());
 		Assert.assertEquals("a", data.removeFront());
 		Assert.assertEquals(5, data.size());
