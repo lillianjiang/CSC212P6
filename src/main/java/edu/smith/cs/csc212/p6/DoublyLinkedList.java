@@ -17,6 +17,7 @@ public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 	}
 
 	@Override
+	//O(1)
 	public T removeFront() {
 		checkNotEmpty();
 
@@ -24,7 +25,7 @@ public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 
 		// if there is only one elements in the doublelinked list
 		// remove it and set both start and end to null
-		if (!isEmpty() && getFront().equals(getBack())) {
+		if (!isEmpty() && getFront().equals(getBack())) { //O(1)
 			this.start = null;
 			this.end = null;
 		}
@@ -40,6 +41,7 @@ public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 	}
 
 	@Override
+	//O(1)
 	public T removeBack() {
 		checkNotEmpty();
 		// Keep a record of the removed value
@@ -59,11 +61,12 @@ public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 	}
 
 	@Override
+	//O(N+N)
 	public T removeIndex(int index) {
 		checkNotEmpty();
 		// Get the node we have to remove
-		Node<T> removed = getNode(index);
-		T removedvalue = getIndex(index);
+		Node<T> removed = getNode(index); //O(N)
+		T removedvalue = getIndex(index); //O(N)
 		// compare whether the removed node is the start/end of the list
 		if (removed == start) {
 			removeFront();
@@ -81,6 +84,7 @@ public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public void addFront(T item) {
 		Node<T> newnode = new Node<T>(item);
 
@@ -95,6 +99,7 @@ public class DoublyLinkedList<T> implements P6List<T>,Iterable<T> {
 	}
 
 	@Override
+	//O(N)
 	public void addBack(T item) {
 		Node<T> newnode = new Node<T>(item);
 
